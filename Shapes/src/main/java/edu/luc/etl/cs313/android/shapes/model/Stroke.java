@@ -8,19 +8,24 @@ public class Stroke implements Shape {
 
 	// TODO entirely your job
 
+	private int color;
+	private Shape shape;
+
 	public Stroke(final int color, final Shape shape) {
+		this.color = color;
+		this.shape = shape;
 	}
 
 	public int getColor() {
-		return -1;
-	}
+		return color;
+	}   //from -1
 
 	public Shape getShape() {
-		return null;
-	}
+		return shape;
+	}  //from null
 
 	@Override
 	public <Result> Result accept(Visitor<Result> v) {
-		return null;
+		return v.onStroke(this);
 	}
 }

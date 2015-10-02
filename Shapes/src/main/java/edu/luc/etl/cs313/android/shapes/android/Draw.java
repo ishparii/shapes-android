@@ -3,6 +3,10 @@ package edu.luc.etl.cs313.android.shapes.android;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
+
+import java.util.Arrays;
+import java.util.Iterator;
+
 import edu.luc.etl.cs313.android.shapes.model.*;
 
 /**
@@ -17,8 +21,8 @@ public class Draw implements Visitor<Void> {
 	private final Paint paint;
 
 	public Draw(final Canvas canvas, final Paint paint) {
-		this.canvas = null; // FIXME
-		this.paint = null; // FIXME
+		this.canvas = canvas; // FIXME from null
+		this.paint = paint; // FIXME from null
 		paint.setStyle(Style.STROKE);
 	}
 
@@ -47,14 +51,16 @@ public class Draw implements Visitor<Void> {
 	}
 
 	@Override
-	public Void onLocation(final Location l) {
-
+	public Void onLocation(final Location l) {  // Anne Fix me
+		canvas.translate(l.getX(), l.getY());
+		onRectangle((Rectangle)l.getShape());
+		canvas.translate(-l.getX(),-l.getY());
 		return null;
 	}
 
 	@Override
 	public Void onRectangle(final Rectangle r) {
-
+		canvas.drawRect(0,0, r.getWidth(), r.getHeight(), paint); // draw a rectangle
 		return null;
 	}
 
@@ -67,7 +73,20 @@ public class Draw implements Visitor<Void> {
 	@Override
 	public Void onPolygon(final Polygon s) {
 
-		final float[] pts = null;
+		int size = s.getPoints().size();
+		size = size*2;
+		final float[] pts = new float[size]; //from null
+		//get each point from the list
+
+
+		for(int n=0,m=0; n<size-2; n=n+2,m++)
+		{
+			pts[n] = (float)s.getPoints().get(m).getX(); //insert the rest of the point
+			pts[n+1] = (float)s.getPoints().get(m).getY();
+		}
+
+		pts[size-2] = pts[0];  //insert the last point
+		pts[size-1] = pts[1];
 
 		canvas.drawLines(pts, paint);
 		return null;

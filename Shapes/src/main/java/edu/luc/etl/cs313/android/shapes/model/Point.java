@@ -9,8 +9,11 @@ public class Point extends Location {
 	// HINT: use a circle with radius 0 as the shape!
 
 	public Point(final int x, final int y) {
-		super(-1, -1, null);
+		super(x, y, new Circle(0));
+		//from super(-1,-1,null)  set x y in Location and set Shape as circle
 		assert x >= 0;
 		assert y >= 0;
 	}
+
+
 }
