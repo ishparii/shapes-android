@@ -23,7 +23,7 @@ public class BoundingBox implements Visitor<Location> {
 	}
 
 	@Override
-	public Location onFill(final Fill f) {  //Anne Fix me
+	public Location onFill(final Fill f) {  //Anne Check me
 		Shape shape = f.getShape();
 		if(shape instanceof Rectangle){
 			return this.onRectangle((Rectangle)shape);
@@ -177,7 +177,7 @@ public class BoundingBox implements Visitor<Location> {
 	}
 
 	@Override
-	public Location onPolygon(final Polygon s) {
+	public Location onPolygon(final Polygon s) {  //Anne Check me
 		int[] arrX = new int[s.getPoints().size()];
 		int[] arrY = new int[s.getPoints().size()];
 
