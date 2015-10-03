@@ -34,7 +34,9 @@ public class BoundingBox implements Visitor<Location> {
 		else if (shape instanceof Polygon){
 			return this.onPolygon((Polygon)shape);
 		}
+		else{
 			return null;
+		}
 	}
 
 	private void addCoordinate(Location lc, List<Integer> x, List<Integer> y){   //Anne Fix me
@@ -67,36 +69,36 @@ public class BoundingBox implements Visitor<Location> {
 			Shape sh = iteratorShapes.next();
 
 			if(sh instanceof Circle){
-				Location lc = onCircle((Circle)sh);
+				Location lc = this.onCircle((Circle) sh);
 				addCoordinate(lc,listOfX,listOfY);
 			}
 			else if(sh instanceof Rectangle){
-				Location lc = onRectangle((Rectangle)sh);
+				Location lc = this.onRectangle((Rectangle) sh);
 				addCoordinate(lc,listOfX,listOfY);
 			}
 			else if(sh instanceof Polygon){
-				Location lc = onPolygon((Polygon) sh);
+				Location lc = this.onPolygon((Polygon) sh);
 				addCoordinate(lc, listOfX, listOfY);
 
 			}
 			else if(sh instanceof Fill){
-				Location lc = onFill((Fill)sh);
+				Location lc = this.onFill((Fill) sh);
 				addCoordinate(lc, listOfX, listOfY);
 			}
 			else if(sh instanceof Location){
-				Location lc = onLocation((Location)sh);
+				Location lc = this.onLocation((Location) sh);
 				addCoordinate(lc, listOfX, listOfY);
 			}
 			else if(sh instanceof Outline){
-				Location lc = onOutline((Outline)sh);
+				Location lc = this.onOutline((Outline) sh);
 				addCoordinate(lc, listOfX, listOfY);
 			}
 			else if(sh instanceof Stroke){
-				Location lc = onStroke((Stroke)sh);
+				Location lc = this.onStroke((Stroke) sh);
 				addCoordinate(lc, listOfX, listOfY);
 			}
 			else{
-				Location lc = onGroup((Group)sh);
+				Location lc = this.onGroup((Group)sh);
 				addCoordinate(lc, listOfX, listOfY);
 			}
 		}
@@ -112,10 +114,26 @@ public class BoundingBox implements Visitor<Location> {
 	}
 
 	@Override
-	public Location onLocation(final Location l) {   //Anne Fix me
-		Rectangle r = (Rectangle)l.getShape();
-		return new Location(l.getX(),l.getY(), new Rectangle(r.getWidth(), r.getHeight()));
+	public Location onLocation(final Location l) {   //Anne Check me  updated - Oct 2nd 10pm
+		Shape shape = l.getShape();
+		if(shape instanceof Rectangle){
+			Rectangle r = (Rectangle)l.getShape();
+			return new Location(l.getX(),l.getY(),new Rectangle(r.getWidth(), r.getHeight()));
+		}
+		else if (shape instanceof Circle){
+			Circle c = (Circle)l.getShape();
+			return new Location(l.getX(),l.getY(),new Rectangle(c.getRadius(), c.getRadius()));
+		}
+		else if (shape instanceof Polygon){
+			return this.onPolygon((Polygon)shape);
+		}
+		else {
+			return null;
+		}
 	}
+
+
+
 
 	@Override
 	public Location onRectangle(final Rectangle r) {
@@ -124,15 +142,38 @@ public class BoundingBox implements Visitor<Location> {
 
 
 	@Override
-	public Location onStroke(final Stroke c) {   //Anne Fix me
-		Rectangle r = (Rectangle)c.getShape();
-		return new Location(0,0, new Rectangle(r.getWidth(), r.getHeight()));
+	public Location onStroke(final Stroke c) {   //Anne Check me  updated - Oct 2nd 10pm
+		Shape shape = c.getShape();
+		if(shape instanceof Rectangle){
+			return this.onRectangle((Rectangle)shape);
+		}
+		else if (shape instanceof Circle){
+			return this.onCircle((Circle)shape);
+		}
+		else if (shape instanceof Polygon){
+			return this.onPolygon((Polygon)shape);
+		}
+		else{
+			return null;
+		}
+
 	}
 
 	@Override
-	public Location onOutline(final Outline o) {   //Anne Fix me
-		Rectangle r = (Rectangle)o.getShape();
-		return new Location(0,0,new Rectangle(r.getWidth(),r.getHeight()));
+	public Location onOutline(final Outline o) {   //Anne Check me  updated - Oct 2nd 10pm
+		Shape shape = o.getShape();
+		if(shape instanceof Rectangle){
+			return this.onRectangle((Rectangle)shape);
+		}
+		else if (shape instanceof Circle){
+			return this.onCircle((Circle)shape);
+		}
+		else if (shape instanceof Polygon){
+			return this.onPolygon((Polygon)shape);
+		}
+		else{
+			return null;
+		}
 	}
 
 	@Override
@@ -165,8 +206,6 @@ public class BoundingBox implements Visitor<Location> {
 			if(y<heightMin)
 				heightMin = y;
 		}
-
-
 		return new Location(widthMin, heightMin, new Rectangle(widthMax-widthMin,heightMax-heightMin));
 	}
 }
