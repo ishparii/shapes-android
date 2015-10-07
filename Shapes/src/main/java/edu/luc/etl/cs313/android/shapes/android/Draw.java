@@ -51,6 +51,18 @@ public class Draw implements Visitor<Void> {
 		else if(shape instanceof Polygon){
 			this.onPolygon((Polygon)shape);
 		}
+		else if(shape instanceof Group){
+			this.onGroup((Group)shape);
+		}
+		else if(shape instanceof Outline){
+			this.onOutline((Outline)shape);
+		}
+		else if(shape instanceof Fill){
+			this.onFill((Fill)shape);
+		}
+		else if(shape instanceof Location) {
+			this.onLocation((Location) shape);
+		}
 		else{
 		}
 		return null;
@@ -60,7 +72,7 @@ public class Draw implements Visitor<Void> {
 	public Void onFill(final Fill f) {  //Anne Check me Oct 2nd 12pm
 		Shape shape = f.getShape();
 
-		paint.setStyle(Style.FILL);
+		paint.setStyle(Style.FILL_AND_STROKE);
 
 		if(shape instanceof Circle){
 			this.onCircle((Circle)shape);
@@ -70,6 +82,18 @@ public class Draw implements Visitor<Void> {
 		}
 		else if(shape instanceof Polygon){
 			this.onPolygon((Polygon)shape);
+		}
+		else if(shape instanceof Group){
+			this.onGroup((Group)shape);
+		}
+		else if(shape instanceof Outline){
+			this.onOutline((Outline)shape);
+		}
+		else if(shape instanceof Stroke){
+			this.onStroke((Stroke)shape);
+		}
+		else if(shape instanceof Location) {
+			this.onLocation((Location) shape);
 		}
 		else{
 		}
@@ -127,6 +151,21 @@ public class Draw implements Visitor<Void> {
 		else if(shape instanceof Polygon){
 			this.onPolygon((Polygon)shape);
 		}
+		else if(shape instanceof Group){
+			this.onGroup((Group)shape);
+		}
+		else if(shape instanceof Outline){
+			this.onOutline((Outline)shape);
+		}
+		else if(shape instanceof Stroke){
+			this.onStroke((Stroke)shape);
+		}
+		else if(shape instanceof Fill) {
+			this.onFill((Fill) shape);
+		}
+		else if(shape instanceof Location) {
+			this.onLocation((Location) shape);
+		}
 		else{
 		}
 		canvas.translate(-l.getX(),-l.getY());
@@ -153,6 +192,18 @@ public class Draw implements Visitor<Void> {
 		}
 		else if(shape instanceof Polygon){
 			this.onPolygon((Polygon)shape);
+		}
+		else if(shape instanceof Group){
+			this.onGroup((Group)shape);
+		}
+		else if(shape instanceof Stroke){
+			this.onStroke((Stroke)shape);
+		}
+		else if(shape instanceof Fill) {
+			this.onFill((Fill) shape);
+		}
+		else if(shape instanceof Location) {
+			this.onLocation((Location) shape);
 		}
 		else{
 		}

@@ -23,19 +23,28 @@ public class BoundingBox implements Visitor<Location> {
 	}
 
 	@Override
-	public Location onFill(final Fill f) {  //Anne Check me
+	public Location onFill(final Fill f) {  //Anne Check me Updated Oct 6 10pm
 		Shape shape = f.getShape();
 		if(shape instanceof Rectangle){
-			return this.onRectangle((Rectangle)shape);
+			return onRectangle((Rectangle) shape);
 		}
-		else if (shape instanceof Circle){
-			return this.onCircle((Circle)shape);
+		else if(shape instanceof Circle){
+			return onCircle((Circle) shape);
 		}
-		else if (shape instanceof Polygon){
-			return this.onPolygon((Polygon)shape);
+		else if(shape instanceof Polygon){
+			return onPolygon((Polygon) shape);
+		}
+		else if(shape instanceof Group){
+			return onGroup((Group)shape);
+		}
+		else if(shape instanceof Stroke){
+			return onStroke((Stroke)shape);
+		}
+		else if (shape instanceof Location){
+			return onLocation((Location)shape);
 		}
 		else{
-			return null;
+			return onOutline((Outline)shape);
 		}
 	}
 
@@ -69,36 +78,37 @@ public class BoundingBox implements Visitor<Location> {
 			Shape sh = iteratorShapes.next();
 
 			if(sh instanceof Circle){
-				Location lc = this.onCircle((Circle) sh);
+				Location lc = onCircle((Circle) sh);
+
 				addCoordinate(lc,listOfX,listOfY);
 			}
 			else if(sh instanceof Rectangle){
-				Location lc = this.onRectangle((Rectangle) sh);
+				Location lc = onRectangle((Rectangle) sh);
 				addCoordinate(lc,listOfX,listOfY);
 			}
 			else if(sh instanceof Polygon){
-				Location lc = this.onPolygon((Polygon) sh);
+				Location lc = onPolygon((Polygon) sh);
 				addCoordinate(lc, listOfX, listOfY);
 
 			}
 			else if(sh instanceof Fill){
-				Location lc = this.onFill((Fill) sh);
+				Location lc = onFill((Fill) sh);
 				addCoordinate(lc, listOfX, listOfY);
 			}
 			else if(sh instanceof Location){
-				Location lc = this.onLocation((Location) sh);
+				Location lc = onLocation((Location) sh);
 				addCoordinate(lc, listOfX, listOfY);
 			}
 			else if(sh instanceof Outline){
-				Location lc = this.onOutline((Outline) sh);
+				Location lc = onOutline((Outline) sh);
 				addCoordinate(lc, listOfX, listOfY);
 			}
 			else if(sh instanceof Stroke){
-				Location lc = this.onStroke((Stroke) sh);
+				Location lc = onStroke((Stroke) sh);
 				addCoordinate(lc, listOfX, listOfY);
 			}
 			else{
-				Location lc = this.onGroup((Group)sh);
+				Location lc = onGroup((Group) sh);
 				addCoordinate(lc, listOfX, listOfY);
 			}
 		}
@@ -114,25 +124,32 @@ public class BoundingBox implements Visitor<Location> {
 	}
 
 	@Override
-	public Location onLocation(final Location l) {   //Anne Check me  updated - Oct 2nd 10pm
+	public Location onLocation(final Location l) {     //Anne Check me Updated Oct 6 10pm
 		Shape shape = l.getShape();
 		if(shape instanceof Rectangle){
-			Rectangle r = (Rectangle)l.getShape();
+			Rectangle r = (Rectangle)shape;
 			return new Location(l.getX(),l.getY(),new Rectangle(r.getWidth(), r.getHeight()));
 		}
-		else if (shape instanceof Circle){
-			Circle c = (Circle)l.getShape();
-			return new Location(l.getX(),l.getY(),new Rectangle(c.getRadius(), c.getRadius()));
+		else if(shape instanceof Circle){
+			Circle c = (Circle)shape;
+			return new Location(l.getX()-c.getRadius(),l.getY()-c.getRadius(),new Rectangle(c.getRadius()*2, c.getRadius()*2));
 		}
-		else if (shape instanceof Polygon){
-			return this.onPolygon((Polygon)shape);
+		else if(shape instanceof Polygon){
+			return onPolygon((Polygon) shape);
+		}
+		else if(shape instanceof Stroke){
+			return onStroke((Stroke)shape);
+		}
+		else if(shape instanceof Fill){
+			return onFill((Fill)shape);
+		}
+		else if(shape instanceof Outline){
+			return onOutline((Outline)shape);
 		}
 		else {
-			return null;
+			return onGroup((Group)shape);
 		}
 	}
-
-
 
 
 	@Override
@@ -142,37 +159,55 @@ public class BoundingBox implements Visitor<Location> {
 
 
 	@Override
-	public Location onStroke(final Stroke c) {   //Anne Check me  updated - Oct 2nd 10pm
+	public Location onStroke(final Stroke c) {     //Anne Check me Updated Oct 6 10pm
 		Shape shape = c.getShape();
 		if(shape instanceof Rectangle){
-			return this.onRectangle((Rectangle)shape);
+			return onRectangle((Rectangle) shape);
 		}
-		else if (shape instanceof Circle){
-			return this.onCircle((Circle)shape);
+		else if(shape instanceof Circle){
+			return onCircle((Circle) shape);
 		}
-		else if (shape instanceof Polygon){
-			return this.onPolygon((Polygon)shape);
+		else if(shape instanceof Polygon){
+			return onPolygon((Polygon) shape);
+		}
+		else if(shape instanceof Outline){
+			return onOutline((Outline)shape);
+		}
+		else if(shape instanceof Fill){
+			return onFill((Fill)shape);
+		}
+		else if(shape instanceof Location){
+			return onLocation((Location)shape);
 		}
 		else{
-			return null;
+			return onGroup((Group)shape);
 		}
 
 	}
 
 	@Override
-	public Location onOutline(final Outline o) {   //Anne Check me  updated - Oct 2nd 10pm
+	public Location onOutline(final Outline o) {    //Anne Check me Updated Oct 6 10pm
 		Shape shape = o.getShape();
 		if(shape instanceof Rectangle){
-			return this.onRectangle((Rectangle)shape);
+			return onRectangle((Rectangle) shape);
 		}
-		else if (shape instanceof Circle){
-			return this.onCircle((Circle)shape);
+		else if(shape instanceof Circle){
+			return onCircle((Circle) shape);
 		}
-		else if (shape instanceof Polygon){
-			return this.onPolygon((Polygon)shape);
+		else if(shape instanceof Polygon){
+			return onPolygon((Polygon) shape);
+		}
+		else if(shape instanceof Group){
+			return onGroup((Group)shape);
+		}
+		else if(shape instanceof Stroke){
+			return onStroke((Stroke)shape);
+		}
+		else if(shape instanceof Fill){
+			return onFill((Fill)shape);
 		}
 		else{
-			return null;
+			return onLocation((Location)shape);
 		}
 	}
 
