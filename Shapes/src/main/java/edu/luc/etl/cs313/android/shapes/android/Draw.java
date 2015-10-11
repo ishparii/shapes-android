@@ -86,17 +86,24 @@ public class Draw implements Visitor<Void> {
 	public Void onPolygon(final Polygon s) {
 
 		List<? extends Point> points = s.getPoints();
-		int size = points.size()*2+2;
+		int size = points.size()*4;
 		final float[] pts = new float[size];
 
-		int i = 0;
-		for (Point point : points) {
-			pts[i] = (float)point.getX();
-			pts[i+1] = (float)point.getY();
-			i=i+2;
+		//first point
+		Point pointFirst = points.get(0);
+		pts[0] = (float)pointFirst.getX();
+		pts[1] = (float)pointFirst.getY();
+
+		int i = 2;
+		for (int k=1; k<points.size(); k++) {
+			float xCurrent = (float)points.get(k).getX();
+			float yCurrent = (float)points.get(k).getY();
+			pts[i] = pts[i+2] = xCurrent;
+			pts[i+1] = pts[i+3] = yCurrent;
+			i = i + 4;
 		}
 
-		//adding the first point as a last one to connect all points
+		//to join last point with the first one
 		pts[size-2] = pts[0];
 		pts[size-1] = pts[1];
 
